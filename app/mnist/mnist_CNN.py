@@ -1,38 +1,48 @@
-import numpy as np
-import torch.nn as nn
 import torch as t
+import torch.nn as nn
+import torch.optim as optim
+import torch.utils.data as Data
+import torchvision
+import matplotlib.pyplot as plt
 
-#build the model for 1D Time_series
-class CNN_1D_Series(nn.Module):
-    def __init__(self):
-        super(CNN_1D_Series, self).__init__()
-        self.conv1 = nn.Sequential(
-            #the first conv
-            nn.Conv1d(
-                in_channels=1,
-                out_channels=8,
-                kernel_size=3
-            ),
-            nn.MaxPool1d(kernel_size=2)
-        )
-        self.conv2 = nn.Sequential(
-            #the second conv
-            nn.Conv1d(
-                in_channels=8,
-                out_channels=16,
-                kernel_size=3
-            ),
-            nn.MaxPool1d(kernel_size=2)
-        )
-        self.fc = nn.Linear(16,1)
+#reproduciable
+t.manual_seed(1)
 
-    def forward(self, input):
-        x = self.conv1(input)
-        x = self.conv2(x)
-        print(x.shape)
-        x = x.view(x.size(0),-1)
-        out = self.fc(x)
-        return out
+# Hyper Parameters
+EPOCH = 1
+BATCH_SIZE = 50
+LR = 0.001 #learning rate
+DOWNLOAD_MNIST  = False
+
+"""
+
+
+#load the data mnist
+train_data = torchvision.datasets.MNIST(
+    root='./',
+    train=True, #set this data to train_data
+    transform=torchvision.transforms.ToTensor(),# 转换 PIL.Image or numpy.ndarray 成
+                                                # torch.FloatTensor (C x H x W), 训练的时候 normalize 成 [0.0, 1.0] 区间
+    download=DOWNLOAD_MNIST
+)
+
+test_data = torchvision.datasets.MNIST(
+    root='./',
+    train=False
+)
+
+#(50,1,28,28)
+train_loader = Data.DataLoader(
+    dataset=train_data,
+    batch_size=BATCH_SIZE,
+    shuffle=True
+)
+
+# test for per 2000
+test_x = t.unsqueeze(test_data.test_data, dim=1).type(t.FloatTensor)[:2000]/255.   # shape from (2000, 28, 28) to (2000, 1, 28, 28), value in range(0,1)
+test_y = test_data.test_labels[:2000]
+
+"""
 
 #build the CNN model #(64,1,8,12) we set the batch_size = 64
 
@@ -108,4 +118,4 @@ if __name__ == '__main__':
     model = CNN()
     output,_ = model(inputs)
     print("CNN mdoel:{}".format(model))
-    print("x:{}".format(output))
+    print("output:{}".format(output))
