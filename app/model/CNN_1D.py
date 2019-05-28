@@ -85,7 +85,7 @@ class CNN(nn.Module):
 
         self.out = nn.Sequential(
             nn.Linear(16, 9),   # fully connected layer, output 9 classes
-            nn.LogSoftmax()
+            nn.LogSoftmax(dim=-1)
         )
 
     def forward(self, x):

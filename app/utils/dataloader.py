@@ -5,7 +5,7 @@ import pandas as pd
 from app.utils import constant
 
 
-batch_size = 20
+torch.manual_seed(1)    # reproducible
 filename = "Down_"
 train_filename = [filename+'trainData.csv',filename+'trainLabel.csv']
 test_filename = [filename+'testData.csv',filename+'testLabel.csv']
@@ -24,15 +24,15 @@ else:
     test_label = np.array(pd.read_csv(os.path.join(constant.TEST_FILES, test_filename[1]),header=None))
 
     #A tensor(test and train)
-    train_tensor_data = torch.tensor(train_data,dtype=torch.long)
-    test_tensor_data = torch.tensor(test_data, dtype=torch.long)
+    train_data = torch.tensor(train_data,dtype=torch.long)
+    test_data = torch.tensor(test_data, dtype=torch.long)
     #label tensor(test and train)
-    train_tensor_label = torch.tensor(test_data,dtype=torch.long)
-    test_tensor_label= torch.tensor(test_label,dtype=torch.long)
+    train_label = torch.tensor(train_label,dtype=torch.long)
+    test_label= torch.tensor(test_label,dtype=torch.long)
 
     #save the file train
-    torch.save((train_tensor_data,train_tensor_label),os.path.join(constant.TRAIN_FIELS,filename+'train.pth'))
+    torch.save((train_data,train_label),os.path.join(constant.TRAIN_FIELS,filename+'train.pth'))
     #save the file test
-    torch.save((test_tensor_data,test_tensor_label),os.path.join(constant.TEST_FILES,filename+'test.pth'))
+    torch.save((test_data,test_label),os.path.join(constant.TEST_FILES,filename+'test.pth'))
 
 
