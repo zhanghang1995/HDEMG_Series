@@ -6,11 +6,11 @@ from app.utils import constant
 
 
 torch.manual_seed(1)    # reproducible
-filename = "Down_"
-train_filename = [filename+'trainData.csv',filename+'trainLabel.csv']
-test_filename = [filename+'testData.csv',filename+'testLabel.csv']
+filename = "InFault6"
+train_filename = [filename+'_trainData.csv',filename+'_trainLabel.csv']
+test_filename = [filename+'_testData.csv',filename+'_testLabel.csv']
 
-if os.path.exists(os.path.join(constant.TRAIN_FIELS, filename+'test.pth') and os.path.join(constant.TEST_FILES,filename+'train.pth')):
+if os.path.exists(os.path.join(constant.TRAIN_FIELS, filename+'_test.pth') and os.path.join(constant.TEST_FILES,filename+'_train.pth')):
     train_data , train_label = torch.load(os.path.join(constant.TRAIN_FIELS, filename+'train.pth'))
     test_data ,test_label = torch.load(os.path.join(constant.TEST_FILES, filename+'test.pth'))
     print('<<<the data of train and test is loaded>>>')
@@ -31,8 +31,8 @@ else:
     test_label= torch.tensor(test_label,dtype=torch.long)
 
     #save the file train
-    torch.save((train_data,train_label),os.path.join(constant.TRAIN_FIELS,filename+'train.pth'))
+    torch.save((train_data,train_label),os.path.join(constant.TRAIN_FIELS,filename+'_train.pth'))
     #save the file test
-    torch.save((test_data,test_label),os.path.join(constant.TEST_FILES,filename+'test.pth'))
+    torch.save((test_data,test_label),os.path.join(constant.TEST_FILES,filename+'_test.pth'))
 
 

@@ -94,7 +94,7 @@ class CNN(nn.Module):
         x = self.conv3(x)
         x1 = x
         x = x.view(x.size(0), -1)           # flatten the output of conv3 to (batch_size, 64 * 4 * 4)
-        print("x:{}".format(x.shape))       #(64,1024)
+        # print("x:{}".format(x.shape))       #(64,1024)
         x = self.linear1(x)
         x = self.linear2(x)
         x = self.linear3(x)
