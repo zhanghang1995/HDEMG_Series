@@ -4,7 +4,8 @@ import torch as t
 import torch.nn as nn
 import torch.optim as optimizer
 from torch.autograd import Variable
-from app.model.CNN_1D import CNN
+
+from app.model.CNN_1D import CNN,weight_init
 from app.utils.dataSet import train_loader,test_loader
 
 """
@@ -14,9 +15,10 @@ from app.utils.dataSet import train_loader,test_loader
 #If the GPU is available
 use_cuda = t.cuda.is_available()
 # Hyper parameter
-EPOCH = 10000
+EPOCH = 1000
 #model
 cnn = CNN()
+cnn.apply(weight_init)
 
 if use_cuda:
     cnn = cnn.cuda()
@@ -35,7 +37,7 @@ def train():
             # 封装为自动求导类型
             x = Variable(x)
             y = Variable(y)
-            # print(x.shape,y.shape)
+            print(x.shape,y.shape)
             # 前向传播
             output,x1 = cnn(x.float())
             loss = loss_func(output,y.squeeze())
@@ -54,11 +56,11 @@ def train():
             # print('Accuracy:{}'.format(100.*predict.eq(y.data.squeeze()).cpu().sum()/y.size(0)))
     # acc = 100. * correct/total
     # print('Accuracy:{}'.format(acc))
-        test(epoch,model=cnn)
+        test(model=cnn)
     return loss
 
 
-def test(epoch,model):
+def test(model):
     correct = 0
     total = 0
     ave_loss = 0
@@ -72,18 +74,18 @@ def test(epoch,model):
         correct += predict.eq(y.data.squeeze()).cpu().sum()
         total += y.size(0)
         #smooth average
-        ave_loss = ave_loss * 0.9 + loss.data[0] * 0.1
+        ave_loss = ave_loss * 0.9 + loss.item() * 0.1
 
         if(step+1) % 10 == 0 or (step+1) == len(test_loader):
-            print("==>>epoch:{},step:{}，test_loss:{:.6f},acc:{:.3f}".format(epoch,step+1,ave_loss,correct * 100./total))
+            print("==>>step:{}，test_loss:{:.6f},acc:{:.3f}".format(step+1,ave_loss,correct * 100./total))
 
-    # print("Total accuracy:{}".format(correct * 100./total))
+    print("Total accuracy:{}".format(correct * 100./total))
 
 
 if __name__ == '__main__':
     # trian model
     loss = train()
-    t.save(cnn,'model_InFault6.pkl')
+    t.save(cnn,'sub8_On.pkl')
     # test model
-    # model = t.load('model_Down.pkl')
+    # model = t.load('IN.pkl')
     # test(model)
